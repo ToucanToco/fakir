@@ -77,8 +77,6 @@ addNewNumericColumn = function(){
     numericInput.push(_input)
 }
 
-ONE_MINUTE_IN_MILLIS=60000;
-
 addTimeToDate = function(date,increase,time){
 
     if (time=='Minutes'){
@@ -168,7 +166,7 @@ generateFakir = function(){
     
     var columnName = Array.prototype.slice.call( document.getElementsByClassName("columnNamesInput") ).map(function(e){return e.value});
     if(document.getElementById("dateCheckbox").checked){
-        columnName.shift()
+        columnName.shift(document.getElementById("dateCheckbox").value)
     }
     
     fakir.unshift(columnName)
@@ -189,8 +187,6 @@ generateAndDownloadFakir = function(){
     link.setAttribute("href", encodedUri);
     link.setAttribute("download", "fakir_data.csv");
     link.click(); 
-
-    // re-init
 }
 
 document.getElementById("dateCheckbox").onclick = toogleDateColumn;
