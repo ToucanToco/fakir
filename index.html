@@ -1,48 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://d3js.org/d3.v5.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
 </head>
 
 <body>
+  <div id="app">
     <div class="center">
-    <h1>Fakir</h1>
-    <p>Simple fake data generator</p>
+      <h1>Fakir</h1>
+      <p>Simple fake data generator</p>
     </div>
 
-    <div id="date" class="columnInputContainer"> 
-        <span class="title">Date column <input id='dateCheckbox' type="checkbox" checked></input> </span> <br>
-        <div id='dateColumnEntry'>
-            Name of the column: <input id="dateColumnName" class="columnNamesInput" value = 'Date'>  <br>
-            Start date : <input id='start' type="date">
-            End date : <input id='end' type="date"> <br>
-            Granularity : <select id="granularity">
-                <option>Minutes</option>
-                <option>Day</option>
-                <option>Month</option>
-                <option>Year</option>
-                </select> 
-            Step : <input id='step' type="number" placeholder="Step" value=1>
-            <br>
-            Format : <input id='format' placeholder="%Y-%m-%d">
-        </div>
+    <div id="date" class="columnInputContainer">
+      <span class="title">Date column</span> <input id='dateCheckbox' type="checkbox" checked v-on:click="toggleDateColumn"><br>
+      <div id='dateColumnEntry' v-if="isDateColumnVisible">
+        <span>Name of the column:</span>
+        <input v-model="columnNameDate" id='dateCheckbox' class='columnNamesInput' value='Date'><br>
+        <span>Start date :</span>
+        <input v-model="startDate" id='start' type="date">
+        <span>End date :</span>
+        <input v-model="endDate" id='end' type="date"><br>
+        <span>Granularity :</span>
+        <select v-model="granularity" id="granularity">
+          <option>Minutes</option>
+          <option>Day</option>
+          <option>Month</option>
+          <option>Year</option>
+        </select>
+        <span>Step :</span>
+        <input v-model="dateStep" id='step' type="number" placeholder="Step"><br>
+        <span>Format :</span>
+        <input v-model="dateFormat" id='format' placeholder="%Y-%m-%d">
+      </div>
     </div>
 
     <div class="columnInputContainer">
-        <span class="title">Label column <button id='labelButton' type="button"> + Add label</button></span><br><br><br>
-        <div id="label"></div>
+      <span class="title">Label column</span>
+      <button id='labelButton' type="button" v-on:click="addNewLabelColumn"> + Add label</button>
+      <div id="label" v-for="(input, index) in labelsInput">
+        <button @click="removeLabelColumn(index)">-</button>
+        <input class="columnNamesInput" placeholder="Choose column name" v-model="input.columnLabelName">
+        <textarea cols="100 " placeholder="Put here the list of your label separated by '/' Exemple : label 1/label 2/label 3" v-model="input.columnLabelValue"></textarea>
+      </div>
     </div>
 
-    <div class="columnInputContainer"> 
-        <span class="title">Numeric column <button id='numericButton' type="button"> + Add numeric value </button></span> <br><br>
-        <div id="numeric"></div>
+    <div class="columnInputContainer">
+      <span class="title">Numeric column</span>
+      <button id='numericButton' type="button" v-on:click="addNewNumericColumn"> + Add numeric value </button>
+      <div id="numeric" v-for="(input, index) in numericInput">
+        <button @click="removeNumericColumn(index)">-</button>
+        <input class="columnNamesInput" placeholder="Choose column name" v-model="input.columnNumericName">
+        <input id="columnNumericMinValue" type="number" placeholder="Choose min value" v-model="input.columnNumericMinValue">
+        <input id="columnNumericMaxValue" type="number" placeholder="Choose max value" v-model="input.columnNumericMaxValue">
+        <input id="columnNumericDecimal" type="number" placeholder="Nb digit after decimal" v-model="input.columnNumericDecimal">
+      </div>
     </div>
 
     <div class="center">
-    <button id='generateButton' type="button"> Download fake data </button>
-    <p> Made with <3 for Toucan Toco concepteur </p>
+      <button id='generateButton' type="button" v-on:click="generateAndDownloadFakir"> Download fake data </button>
+      <p> Made with <3 for Toucan Toco csm </p>
     </div>
+  </div>
 </body>
+
 <script src="script.js"></script>
 </html>
