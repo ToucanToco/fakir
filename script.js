@@ -1,213 +1,140 @@
+var app = new Vue({
+  el: '#app',
 
-addNewLabelColumn= function(){
-    console.log("addNewLabelColumn")
+  data: {
+    isDateColumnVisible: true,
+    label: document.getElementById("label"),
+    labelsInput: [],
+    numeric: document.getElementById("numeric"),
+    numericInput: []
+  },
 
-    var columnEntry = document.createElement("div");
-    columnEntry.className = 'labelColumnEntry'
-    document.getElementById("label").appendChild(columnEntry)
+  methods: {
+    addNewLabelColumn: function() {
+      this.labelsInput.push({
+        columnLabelName: '',
+        columnLabelValue: ''
+      })
+    },
 
-    // button :: delete
-    var _ = document.createElement("button");
-    _.innerHTML = "-"
-    _.onclick = removeLabelColumn
+    addNewNumericColumn: function() {
+      this.numericInput.push({
+        columnNumericName: '',
+        columnNumericMinValue: '',
+        columnNumericMaxValue: '',
+        columnNumericDecimal: ''
+      })
+    },
 
-    columnEntry.appendChild(_)
-
-
-    // input :: name of column
-    var _ = document.createElement("input");
-    _.setAttribute("class","columnNamesInput")
-    _.setAttribute("placeholder", "Choose column name") 
-
-    columnEntry.appendChild(_)
-
-
-    // textarea :: labels inpout
-    var _ = document.createElement("textarea");
-    _.setAttribute("class","labelsInput")
-    _.setAttribute("cols", "100 ")
-    _.setAttribute("placeholder", "Put here the list of your label separated by '/' Exemple : label 1/label 2/label 3")
-
-    columnEntry.appendChild(_) 
-
-}
-
-removeLabelColumn= function(){
-    console.log("removeLabelColumn")
-
-    document.getElementById("label").removeChild(this.parentNode)
-}
-
-removeNumericColumn= function(){
-    console.log("removeNumericColumn")
-
-    document.getElementById("numeric").removeChild(this.parentNode)
-}
-
-addNewNumericColumn = function(){
-    console.log("addNewNumericColumn")
-
-    var columnEntry = document.createElement("div");
-    columnEntry.className = 'numericColumnEntry'
-    document.getElementById("numeric").appendChild(columnEntry)
-
-    // button :: delete
-    var _ = document.createElement("button");
-    _.innerHTML = "-"
-    _.onclick = removeNumericColumn
-
-    columnEntry.appendChild(_)
-
-
-    // input :: column name
-    var _ = document.createElement("input");
-    _.setAttribute("class","columnNamesInput")
-    _.setAttribute("placeholder", "Choose column name") 
-
-    columnEntry.appendChild(_)
-
-
-    // input :: min
-    var _ = document.createElement("input");
-    _.setAttribute("type", "number")
-    _.setAttribute("placeholder", "Choose min value") 
-
-    _.setAttribute("class","min")
-    columnEntry.appendChild(_)
-
-
-    // input :: max
-    var _ = document.createElement("input");
-    _.setAttribute("type", "number")
-    _.setAttribute("placeholder", "Choose max value") 
-
-    _.setAttribute("class","max")
-    columnEntry.appendChild(_)
-
-
-    // input :: precision
-    var _ = document.createElement("input");
-    _.setAttribute("type", "number")
-    _.setAttribute("placeholder", "Nb digit after decimal")
-
-    _.setAttribute("class","precision")
-    columnEntry.appendChild(_)
-
-}
-
-addTimeToDate = function(date,increase,time){
-
-    if (time=='Minutes'){
+    addTimeToDate: function(date,increase,time){
+      if (time=='Minutes'){
         date.setMinutes(date.getMinutes() + increase);
         return date
-    }
-
-    if (time=='Year'){
+      }
+      if (time=='Year'){
         date.setFullYear(date.getYear() + increase);
         return date
-    }
-
-    if (time=='Month'){
+      }
+      if (time=='Month'){
         date.setMonth(date.getMonth() + increase);
         return date
-    }
-
-    if (time=='Day'){
+      }
+      if (time=='Day'){
         date.setDate(date.getDate() + increase);
         return date
-    }
+      }
+    },
 
-}
-
-toogleDateColumn = function(){
-    document.getElementById("dateColumnEntry").classList.toggle('notDisplay')
-    document.getElementById("dateColumnName").classList.toggle('columnNamesInput')
-}
-
-function product(args) {
-  return args.reduce(function tl (accumulator, value) {
-    var tmp = [];
-    accumulator.forEach(function (a0) {
-      value.forEach(function (a1) {
-        tmp.push(a0.concat(a1));
+    generateAndDownloadFakir: function() {
+      const rows = this.generateFakir();
+      let csvContent = "data:text/csv;charset=utf-8,";
+      rows.forEach(function(rowArray) {
+        let row = rowArray.join(",");
+        csvContent += row + "\r\n";
       });
-    });
-    return tmp;
-  }, [[]]);
-}
 
-generateFakir = function(){
+      var encodedUri = encodeURI(csvContent);
+      var link = document.createElement("a")
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "fakir_data.csv");
+      link.click();
+    },
 
-    //  label
-    labelsInputValue = Array.prototype.slice.call( document.getElementsByClassName("labelsInput") )
-                            .map(function(e){return e.value.split("/")})
+    generateFakir: function() {
+      console.log(this.labelsInput.map(function(e){return e}));
+      console.log(this.numericInput.map(function(e){return e}));
+      labelsInputValue = this.labelsInput.map(function(e){return e.columnLabelValue.split("/")});
+      var dateInputValue = [];
 
-    //  date
-    var dateInputValue = [];
-    if(document.getElementById("dateCheckbox").checked){
-        
+      if(document.getElementById("dateColumnEntry")) {
         var start = document.getElementById("start").valueAsDate,
-            end = document.getElementById("end").valueAsDate,
-            granularity = document.querySelector("#granularity").value, 
-            format;
-        
+          end = document.getElementById("end").valueAsDate,
+          granularity = document.querySelector("#granularity").value,
+          format;
+
         if(document.getElementById("format").value=="" ){
-            format = d3.timeFormat("%Y-%m-%d"); 
+          format = d3.timeFormat("%Y-%m-%d");
         }
         else{
-            format = d3.timeFormat(document.getElementById("format").value);
+          format = d3.timeFormat(document.getElementById("format").value);
         }
 
-
-        if(start==null || end==null){
-            console.log("Date input not valid !")
+        if(start == null || end == null){
+          console.log("Date input not valid !")
         }
-        else{
-            var d = start;
-            while(d < end){
-                dateInputValue.push(d)
-                d = addTimeToDate(d, parseFloat(document.getElementById("step").value), granularity)
-            }
-            labelsInputValue.push(dateInputValue.map(function(e){return format(e)}))
-            a = true;
+        else {
+          var d = start;
+          while(d < end){
+              dateInputValue.push(d)
+              d = addTimeToDate(d, parseFloat(document.getElementById("step").value), granularity)
+          }
+          labelsInputValue.push(dateInputValue.map(function(e){return format(e)}))
         }
-    }
+      }
 
-    var fakir;
-    fakir = product(labelsInputValue)
-    
-    //  numeric
-    for(i=0; i<document.getElementsByClassName("min").length; i++){
-        var min = parseFloat(document.getElementsByClassName("min")[i].value,)
-            max = parseFloat(document.getElementsByClassName("max")[i].value,)
-            precision = Math.pow(10, parseFloat(document.getElementsByClassName("precision")[i].value));
-        
+      var fakir;
+      fakir = this.product(labelsInputValue)
+
+      for(i = 0; i < this.numericInput.length; i++){
+        var _input = this.numericInput[i],
+          min = parseFloat(document.getElementById("columnNumericMinValue"),)
+          max = parseFloat(document.getElementById("columnNumericMaxValue"),)
+          precision = Math.pow(10, parseFloat(document.getElementById("columnNumericDecimal")));
+
         fakir.map(function(e){return e.push( Math.round((min+(Math.random()*max))*precision)/precision )});
+      }
+
+      var columnName = Array.prototype.slice.call( document.getElementsByClassName("columnNamesInput") ).map(function(e){return e.value});
+      if(document.getElementById("dateCheckbox").checked){
+        columnName.shift()
+      }
+
+      fakir.unshift(columnName)
+      return fakir;
+    },
+
+    product: function(args) {
+      return args.reduce(function tl (accumulator, value) {
+        var tmp = [];
+        accumulator.forEach(function (a0) {
+          value.forEach(function (a1) {
+            tmp.push(a0.concat(a1));
+          });
+        });
+        return tmp;
+      }, [[]])
+    },
+
+    removeLabelColumn: function(index) {
+      this.labelsInput.splice(index, 1)
+    },
+
+    removeNumericColumn: function(index) {
+      this.numericInput.splice(index, 1)
+    },
+
+    toggleDateColumn: function() {
+      return this.isDateColumnVisible = !this.isDateColumnVisible
     }
-    
-    //  columnName
-    var columnName = Array.prototype.slice.call( document.getElementsByClassName("columnNamesInput") ).map(function(e){return e.value});
-    fakir.unshift(columnName)
-    return fakir;
-}
-
-generateAndDownloadFakir = function(){
-
-    const rows = generateFakir();
-    let csvContent = "data:text/csv;charset=utf-8,";
-    rows.forEach(function(rowArray){
-    let row = rowArray.join(",");
-    csvContent += row + "\r\n";
-    }); 
-
-    var encodedUri = encodeURI(csvContent);
-    var link = document.createElement("a")
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "fakir_data.csv");
-    link.click(); 
-}
-
-document.getElementById("dateCheckbox").onclick = toogleDateColumn;
-document.getElementById("labelButton").onclick = addNewLabelColumn;
-document.getElementById("numericButton").onclick = addNewNumericColumn;
-document.getElementById("generateButton").onclick = generateAndDownloadFakir;
+  }
+})
