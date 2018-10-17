@@ -1,80 +1,98 @@
-var label = document.getElementById("label"),
-    numeric = document.getElementById("numeric"),
-    labelsInput = [],
-    numericInput = [];
 
 addNewLabelColumn= function(){
     console.log("addNewLabelColumn")
 
     var columnEntry = document.createElement("div");
-    label.appendChild(columnEntry)
+    columnEntry.className = 'labelColumnEntry'
+    document.getElementById("label").appendChild(columnEntry)
 
+    // button :: delete
     var _ = document.createElement("button");
-    columnEntry.appendChild(_)
     _.innerHTML = "-"
     _.onclick = removeLabelColumn
 
-    var _ = document.createElement("input");
     columnEntry.appendChild(_)
+
+
+    // input :: name of column
+    var _ = document.createElement("input");
     _.setAttribute("class","columnNamesInput")
     _.setAttribute("placeholder", "Choose column name") 
 
-    var _ = document.createElement("textarea");
     columnEntry.appendChild(_)
-    labelsInput.push(_)
+
+
+    // textarea :: labels inpout
+    var _ = document.createElement("textarea");
+    _.setAttribute("class","labelsInput")
     _.setAttribute("cols", "100 ")
-    _.setAttribute("placeholder", "Put here the list of your label separated by '/' Exemple : label 1/label 2/label 3") 
+    _.setAttribute("placeholder", "Put here the list of your label separated by '/' Exemple : label 1/label 2/label 3")
+
+    columnEntry.appendChild(_) 
 
 }
 
 removeLabelColumn= function(){
     console.log("removeLabelColumn")
-    labelsInput.splice( labelsInput.indexOf(this.parentNode.getElementsByTagName("textarea")) ,1)
-    label.removeChild(this.parentNode)
+
+    document.getElementById("label").removeChild(this.parentNode)
 }
 
 removeNumericColumn= function(){
     console.log("removeNumericColumn")
-    numericInput.splice( numericInput.indexOf(this.parentNode.getElementsByTagName("textarea")) ,1)
-    numeric.removeChild(this.parentNode)
+
+    document.getElementById("numeric").removeChild(this.parentNode)
 }
 
 addNewNumericColumn = function(){
     console.log("addNewNumericColumn")
 
     var columnEntry = document.createElement("div");
-    numeric.appendChild(columnEntry)
+    columnEntry.className = 'numericColumnEntry'
+    document.getElementById("numeric").appendChild(columnEntry)
 
+    // button :: delete
     var _ = document.createElement("button");
-    columnEntry.appendChild(_)
     _.innerHTML = "-"
     _.onclick = removeNumericColumn
 
-    var _ = document.createElement("input");
     columnEntry.appendChild(_)
-     _.setAttribute("class","columnNamesInput")
+
+
+    // input :: column name
+    var _ = document.createElement("input");
+    _.setAttribute("class","columnNamesInput")
     _.setAttribute("placeholder", "Choose column name") 
 
-    _input = {}
+    columnEntry.appendChild(_)
+
+
+    // input :: min
     var _ = document.createElement("input");
     _.setAttribute("type", "number")
-    columnEntry.appendChild(_)
-    _input["min"] = _
     _.setAttribute("placeholder", "Choose min value") 
 
+    _.setAttribute("class","min")
+    columnEntry.appendChild(_)
+
+
+    // input :: max
     var _ = document.createElement("input");
     _.setAttribute("type", "number")
-    columnEntry.appendChild(_)
-    _input["max"] = _
     _.setAttribute("placeholder", "Choose max value") 
 
+    _.setAttribute("class","max")
+    columnEntry.appendChild(_)
+
+
+    // input :: precision
     var _ = document.createElement("input");
     _.setAttribute("type", "number")
-    columnEntry.appendChild(_)
-    _input["precision"] = _
     _.setAttribute("placeholder", "Nb digit after decimal")
 
-    numericInput.push(_input)
+    _.setAttribute("class","precision")
+    columnEntry.appendChild(_)
+
 }
 
 addTimeToDate = function(date,increase,time){
@@ -103,6 +121,7 @@ addTimeToDate = function(date,increase,time){
 
 toogleDateColumn = function(){
     document.getElementById("dateColumnEntry").classList.toggle('notDisplay')
+    document.getElementById("dateColumnName").classList.toggle('columnNamesInput')
 }
 
 function product(args) {
@@ -119,8 +138,11 @@ function product(args) {
 
 generateFakir = function(){
 
-    labelsInputValue = labelsInput.map(function(e){return e.value.split("/")})
+    //  label
+    labelsInputValue = Array.prototype.slice.call( document.getElementsByClassName("labelsInput") )
+                            .map(function(e){return e.value.split("/")})
 
+    //  date
     var dateInputValue = [];
     if(document.getElementById("dateCheckbox").checked){
         
@@ -128,8 +150,6 @@ generateFakir = function(){
             end = document.getElementById("end").valueAsDate,
             granularity = document.querySelector("#granularity").value, 
             format;
-            
-        
         
         if(document.getElementById("format").value=="" ){
             format = d3.timeFormat("%Y-%m-%d"); 
@@ -149,26 +169,24 @@ generateFakir = function(){
                 d = addTimeToDate(d, parseFloat(document.getElementById("step").value), granularity)
             }
             labelsInputValue.push(dateInputValue.map(function(e){return format(e)}))
+            a = true;
         }
     }
 
     var fakir;
     fakir = product(labelsInputValue)
     
-    for(i=0; i<numericInput.length; i++){
-        var _input = numericInput[i],
-            min = parseFloat(_input["min"].value,)
-            max = parseFloat(_input["max"].value,)
-            precision = Math.pow(10, parseFloat(_input["precision"].value));
+    //  numeric
+    for(i=0; i<document.getElementsByClassName("min").length; i++){
+        var min = parseFloat(document.getElementsByClassName("min")[i].value,)
+            max = parseFloat(document.getElementsByClassName("max")[i].value,)
+            precision = Math.pow(10, parseFloat(document.getElementsByClassName("precision")[i].value));
         
         fakir.map(function(e){return e.push( Math.round((min+(Math.random()*max))*precision)/precision )});
     }
     
+    //  columnName
     var columnName = Array.prototype.slice.call( document.getElementsByClassName("columnNamesInput") ).map(function(e){return e.value});
-    if(document.getElementById("dateCheckbox").checked){
-        columnName.shift(document.getElementById("dateCheckbox").value)
-    }
-    
     fakir.unshift(columnName)
     return fakir;
 }
