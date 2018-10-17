@@ -2,9 +2,16 @@ var app = new Vue({
   el: '#app',
 
   data: {
+    dateFormat: '%Y-%m-%d',
+    dateStep: 1,
+    columnNameDate: 'Date',
+    granularity: '',
     isDateColumnVisible: true,
     labelsInput: [],
-    numericInput: []
+    labelsInputValue: [],
+    numericInput: [],
+    startDate: null,
+    endDate: null,
   },
 
   methods: {
@@ -22,33 +29,36 @@ var app = new Vue({
         columnNumericMaxValue: '',
         columnNumericDecimal: ''
       })
-
     },
 
-    addTimeToDate: function(date,increase,time){
-      if (time=='Minutes'){
+    addTimeToDate: function(date, increase, time) {
+      if (time === 'Minutes'){
         date.setMinutes(date.getMinutes() + increase);
         return date
       }
-      if (time=='Year'){
+
+      if (time === 'Year'){
         date.setFullYear(date.getYear() + increase);
         return date
       }
-      if (time=='Month'){
+
+      if (time === 'Month'){
         date.setMonth(date.getMonth() + increase);
         return date
       }
-      if (time=='Day'){
+
+      if (time === 'Day'){
         date.setDate(date.getDate() + increase);
         return date
       }
     },
 
     generateAndDownloadFakir: function() {
-      const rows = this.generateFakir();
-      let csvContent = "data:text/csv;charset=utf-8,";
+      var rows = this.generateFakir();
+      var csvContent = "data:text/csv;charset=utf-8,";
+
       rows.forEach(function(rowArray) {
-        let row = rowArray.join(",");
+        var row = rowArray.join(",");
         csvContent += row + "\r\n";
       });
 
@@ -60,57 +70,40 @@ var app = new Vue({
     },
 
     generateFakir: function() {
-
       // label
-      labelsInputValue = this.labelsInput.map(function(e){return e.columnLabelValue.split("/")});
-      var dateInputValue = [];
+      this.labelsInputValue = this.labelsInput.map(function(e) { return e.columnLabelValue.split("/") });
 
-      if(this.isDateColumnVisible) {
-        var start = document.getElementById("start").valueAsDate,
-            end = document.getElementById("end").valueAsDate,
-            granularity = document.querySelector("#granularity").value,
-            format;
-
-        if(document.getElementById("format").value=="" ){
-          format = d3.timeFormat("%Y-%m-%d");
-        }
-        else{
-          format = d3.timeFormat(document.getElementById("format").value);
-        }
-
-        if(start == null || end == null){
-          console.log("Date input not valid !")
-        }
-        else {
-          var d = start;
-          while(d < end){
-              dateInputValue.push(d)
-              d = addTimeToDate(d, parseFloat(document.getElementById("step").value), granularity)
-          }
-          labelsInputValue.push(dateInputValue.map(function(e){return format(e)}))
-        }
-      }
+      this.transformDateInLabel();
 
       var fakir;
-      fakir = this.product(labelsInputValue)
+      fakir = this.product(this.labelsInputValue)
 
-    // numeric
+      // numeric
       for(i = 0; i < this.numericInput.length; i++){
 
           var min = parseFloat(this.numericInput[i].columnNumericMinValue),
               max = parseFloat(this.numericInput[i].columnNumericMaxValue),
               decimal = Math.pow(10, parseFloat(this.numericInput[i].columnNumericDecimal));
 
-        fakir.map(function(e){return e.push( Math.round((min+(Math.random()*max))*decimal)/decimal )});
+        fakir.map(function(e){ return e.push(Math.round((min+(Math.random() * max)) * decimal) / decimal)});
       }
 
       // column
-      var columnName = Array.prototype.slice.call( document.getElementsByClassName("columnNamesInput") ).map(function(e){return e.value});
-      if(document.getElementById("dateCheckbox").checked){
-        columnName.shift()
+      var columnsName = [];
+
+      if (this.labelsInput.length) {
+        columnsName = _.concat(columnsName, _.map(this.labelsInput, 'columnLabelName'))
       }
 
-      fakir.unshift(columnName)
+      if (this.numericInput.length) {
+        columnsName = _.concat(columnsName, _.map(this.numericInput, 'columnLabelName'))
+      }
+
+      if (this.isDateColumnVisible) {
+        columnsName.push(this.columnNameDate)
+      }
+
+      fakir.unshift(columnsName)
       return fakir;
     },
 
@@ -135,7 +128,30 @@ var app = new Vue({
     },
 
     toggleDateColumn: function() {
-      return this.isDateColumnVisible = !this.isDateColumnVisible
+      this.isDateColumnVisible = !this.isDateColumnVisible
+    },
+
+    transformDateInLabel: function() {
+      var dateInputValue = [];
+
+      if (this.isDateColumnVisible) {
+        var format;
+
+        format = d3.timeFormat(this.dateFormat);
+
+        if(_.isNull(this.startDate) || _.isNull(this.endDate)) {
+          console.log("Date input not valid !")
+        }
+        else {
+          var d = new Date(_.clone(this.startDate));
+
+          while(d < new Date(this.endDate)) {
+            dateInputValue.push(format(d))
+            d = this.addTimeToDate(d, parseFloat(this.dateStep), this.granularity)
+          }
+          this.labelsInputValue.push(dateInputValue)
+        }
+      }
     }
   }
 })
