@@ -3,9 +3,7 @@ var app = new Vue({
 
   data: {
     isDateColumnVisible: true,
-    label: document.getElementById("label"),
     labelsInput: [],
-    numeric: document.getElementById("numeric"),
     numericInput: []
   },
 
@@ -24,6 +22,7 @@ var app = new Vue({
         columnNumericMaxValue: '',
         columnNumericDecimal: ''
       })
+
     },
 
     addTimeToDate: function(date,increase,time){
@@ -61,16 +60,16 @@ var app = new Vue({
     },
 
     generateFakir: function() {
-      console.log(this.labelsInput.map(function(e){return e}));
-      console.log(this.numericInput.map(function(e){return e}));
+
+      // label
       labelsInputValue = this.labelsInput.map(function(e){return e.columnLabelValue.split("/")});
       var dateInputValue = [];
 
-      if(document.getElementById("dateColumnEntry")) {
+      if(this.isDateColumnVisible) {
         var start = document.getElementById("start").valueAsDate,
-          end = document.getElementById("end").valueAsDate,
-          granularity = document.querySelector("#granularity").value,
-          format;
+            end = document.getElementById("end").valueAsDate,
+            granularity = document.querySelector("#granularity").value,
+            format;
 
         if(document.getElementById("format").value=="" ){
           format = d3.timeFormat("%Y-%m-%d");
@@ -95,15 +94,17 @@ var app = new Vue({
       var fakir;
       fakir = this.product(labelsInputValue)
 
+    // numeric
       for(i = 0; i < this.numericInput.length; i++){
-        var _input = this.numericInput[i],
-          min = parseFloat(document.getElementById("columnNumericMinValue"),)
-          max = parseFloat(document.getElementById("columnNumericMaxValue"),)
-          precision = Math.pow(10, parseFloat(document.getElementById("columnNumericDecimal")));
 
-        fakir.map(function(e){return e.push( Math.round((min+(Math.random()*max))*precision)/precision )});
+          var min = parseFloat(this.numericInput[i].columnNumericMinValue),
+              max = parseFloat(this.numericInput[i].columnNumericMaxValue),
+              decimal = Math.pow(10, parseFloat(this.numericInput[i].columnNumericDecimal));
+
+        fakir.map(function(e){return e.push( Math.round((min+(Math.random()*max))*decimal)/decimal )});
       }
 
+      // column
       var columnName = Array.prototype.slice.call( document.getElementsByClassName("columnNamesInput") ).map(function(e){return e.value});
       if(document.getElementById("dateCheckbox").checked){
         columnName.shift()
