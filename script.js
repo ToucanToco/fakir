@@ -138,9 +138,10 @@ function product(args) {
 
 generateFakir = function(){
 
+
     //  label
-    labelsInputValue = Array.prototype.slice.call( document.getElementsByClassName("labelsInput") )
-                            .map(function(e){return e.value.split("/")})
+    var labelsInputValue = Array.prototype.slice.call( document.getElementsByClassName("labelsInput") )
+                                .map(function(e){return e.value.split("/")})
 
     //  date
     var dateInputValue = [];
@@ -163,10 +164,10 @@ generateFakir = function(){
             console.log("Date input not valid !")
         }
         else{
-            var d = start;
+            var d = new Date(start);
             while(d < end){
                 dateInputValue.push(d)
-                d = addTimeToDate(d, parseFloat(document.getElementById("step").value), granularity)
+                d = new Date(addTimeToDate(d, parseFloat(document.getElementById("step").value), granularity))
             }
             labelsInputValue.push(dateInputValue.map(function(e){return format(e)}))
             a = true;
