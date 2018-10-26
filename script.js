@@ -2,6 +2,11 @@
 addNewLabelColumn= function(){
     console.log("addNewLabelColumn")
 
+    ga('send', 'event', {
+        eventAction: 'click',
+        eventLabel: "addNewLabelColumn"
+    });
+
     var columnEntry = document.createElement("div");
     columnEntry.className = 'labelColumnEntry'
     document.getElementById("label").appendChild(columnEntry)
@@ -34,18 +39,30 @@ addNewLabelColumn= function(){
 
 removeLabelColumn= function(){
     console.log("removeLabelColumn")
+    ga('send', 'event', {
+        eventAction: 'click',
+        eventLabel: "removeLabelColumn"
+    });
 
     document.getElementById("label").removeChild(this.parentNode)
 }
 
 removeNumericColumn= function(){
     console.log("removeNumericColumn")
+    ga('send', 'event', {
+        eventAction: 'click',
+        eventLabel: "removeNumericColumn"
+    });
 
     document.getElementById("numeric").removeChild(this.parentNode)
 }
 
 addNewNumericColumn = function(){
     console.log("addNewNumericColumn")
+    ga('send', 'event', {
+        eventAction: 'click',
+        eventLabel: "addNewNumericColumn"
+    });
 
     var columnEntry = document.createElement("div");
     columnEntry.className = 'numericColumnEntry'
@@ -122,6 +139,11 @@ addTimeToDate = function(date,increase,time){
 toogleDateColumn = function(){
     document.getElementById("dateColumnEntry").classList.toggle('notDisplay')
     document.getElementById("dateColumnName").classList.toggle('columnNamesInput')
+
+    ga('send', 'event', {
+        eventAction: 'click',
+        eventLabel: "toogleDateColumn"
+    });
 }
 
 function product(args) {
@@ -206,6 +228,11 @@ generateAndDownloadFakir = function(){
     link.setAttribute("href", encodedUri);
     link.setAttribute("download", "fakir_data.csv");
     link.click(); 
+
+    ga('send', 'event', {
+        eventAction: 'click',
+        eventLabel: "generateAndDownloadFakir"
+    });
 }
 
 document.getElementById("dateCheckbox").onclick = toogleDateColumn;
