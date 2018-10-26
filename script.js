@@ -2,10 +2,7 @@
 addNewLabelColumn= function(){
     console.log("addNewLabelColumn")
 
-    ga('send', 'event', {
-        eventAction: 'click',
-        eventLabel: "addNewLabelColumn"
-    });
+    ga('send', 'event', "addNewLabelColumn", 'click', "addNewLabelColumn", 1)
 
     var columnEntry = document.createElement("div");
     columnEntry.className = 'labelColumnEntry'
@@ -39,10 +36,7 @@ addNewLabelColumn= function(){
 
 removeLabelColumn= function(){
     console.log("removeLabelColumn")
-    ga('send', 'event', {
-        eventAction: 'click',
-        eventLabel: "removeLabelColumn"
-    });
+    ga('send', 'event', "removeLabelColumn", 'click', "removeLabelColumn", 1)
 
     document.getElementById("label").removeChild(this.parentNode)
 }
@@ -59,10 +53,7 @@ removeNumericColumn= function(){
 
 addNewNumericColumn = function(){
     console.log("addNewNumericColumn")
-    ga('send', 'event', {
-        eventAction: 'click',
-        eventLabel: "addNewNumericColumn"
-    });
+    ga('send', 'event', "addNewNumericColumn", 'click', "addNewNumericColumn", 1)
 
     var columnEntry = document.createElement("div");
     columnEntry.className = 'numericColumnEntry'
@@ -139,11 +130,7 @@ addTimeToDate = function(date,increase,time){
 toogleDateColumn = function(){
     document.getElementById("dateColumnEntry").classList.toggle('notDisplay')
     document.getElementById("dateColumnName").classList.toggle('columnNamesInput')
-
-    ga('send', 'event', {
-        eventAction: 'click',
-        eventLabel: "toogleDateColumn"
-    });
+    ga('send', 'event', "toogleDateColumn", 'click', "toogleDateColumn", 1)
 }
 
 function product(args) {
@@ -229,10 +216,7 @@ generateAndDownloadFakir = function(){
     link.setAttribute("download", "fakir_data.csv");
     link.click(); 
 
-    ga('send', 'event', {
-        eventAction: 'click',
-        eventLabel: "generateAndDownloadFakir"
-    });
+    ga('send', 'event', "generateAndDownloadFakir", 'click', "generateAndDownloadFakir", 1)
 }
 
 document.getElementById("dateCheckbox").onclick = toogleDateColumn;
