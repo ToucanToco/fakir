@@ -1,7 +1,6 @@
 
 addNewLabelColumn= function(){
     console.log("addNewLabelColumn")
-
     ga('send', 'event', "addNewLabelColumn", 'click', "addNewLabelColumn", 1)
 
     var columnEntry = document.createElement("div");
@@ -43,10 +42,7 @@ removeLabelColumn= function(){
 
 removeNumericColumn= function(){
     console.log("removeNumericColumn")
-    ga('send', 'event', {
-        eventAction: 'click',
-        eventLabel: "removeNumericColumn"
-    });
+    ga('send', 'event', "removeNumericColumn", 'click', "removeNumericColumn", 1)
 
     document.getElementById("numeric").removeChild(this.parentNode)
 }
@@ -149,8 +145,7 @@ generateFakir = function(){
 
 
     //  label
-    var labelsInputValue = Array.prototype.slice.call( document.getElementsByClassName("labelsInput") )
-                                .map(function(e){return e.value.split("/")})
+    var labelsInputValue;
 
     //  date
     var dateInputValue = [];
@@ -178,9 +173,14 @@ generateFakir = function(){
                 dateInputValue.push(d)
                 d = new Date(addTimeToDate(d, parseFloat(document.getElementById("step").value), granularity))
             }
-            labelsInputValue.push(dateInputValue.map(function(e){return format(e)}))
-            a = true;
+            labelsInputValue = [dateInputValue.map(function(e){return format(e)})]
+            labelsInputValue = labelsInputValue.concat(Array.prototype.slice.call( document.getElementsByClassName("labelsInput") )
+                                        .map(function(e){return e.value.split("/")}))
         }
+    }           
+    else{
+        labelsInputValue = Array.prototype.slice.call( document.getElementsByClassName("labelsInput") )
+                                        .map(function(e){return e.value.split("/")})
     }
 
     var fakir;
