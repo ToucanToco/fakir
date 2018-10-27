@@ -23,32 +23,12 @@
     <p>Simple fake data generator</p>
     </div>
 
-    <div id="date" class="columnInputContainer"> 
-        <span class="title">Date column <input id='dateCheckbox' type="checkbox" checked></input> </span> <br>
-        <div id='dateColumnEntry'>
-            Name of the column: <input id="dateColumnName" class="columnNamesInput" value = 'Date'>  <br>
-            Start date : <input id='start' type="date">
-            End date : <input id='end' type="date"> <br>
-            Granularity : <select id="granularity">
-                <option>Minutes</option>
-                <option>Day</option>
-                <option>Month</option>
-                <option>Year</option>
-                </select> 
-            Step : <input id='step' type="number" placeholder="Step" value=1>
-            <br>
-            Format : <input id='format' placeholder="%Y-%m-%d">
-        </div>
+    <div id="settings">
+        <div id='index' class="settings"> Settings of index</div>
     </div>
 
-    <div class="columnInputContainer">
-        <span class="title">Label column <button id='labelButton' type="button"> + Add label</button></span><br><br><br>
-        <div id="label"></div>
-    </div>
 
-    <div class="columnInputContainer"> 
-        <span class="title">Numeric column <button id='numericButton' type="button"> + Add numeric value </button></span> <br><br>
-        <div id="numeric"></div>
+    <div id="table">
     </div>
 
     <div class="center">
