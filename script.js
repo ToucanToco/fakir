@@ -70,12 +70,22 @@ addNewNumericColumn = function(){
 
     columnEntry.appendChild(_)
 
+    // input :: type
+    var _ = document.createElement("span")
+    _.innerHTML = "Type :"
+    columnEntry.appendChild(_)
+
+    var _ = document.createElement("select");
+    _.setAttribute("class","numericType")
+    _.innerHTML = "<option>None</option><option>YTD</option><option>Percentage</option>"
+    columnEntry.appendChild(_)
+
+    columnEntry.appendChild(document.createElement("div"))
 
     // input :: min
     var _ = document.createElement("input");
     _.setAttribute("type", "number")
     _.setAttribute("placeholder", "Choose min value") 
-
     _.setAttribute("class","min")
     columnEntry.appendChild(_)
 
@@ -87,7 +97,6 @@ addNewNumericColumn = function(){
 
     _.setAttribute("class","max")
     columnEntry.appendChild(_)
-
 
     // input :: precision
     var _ = document.createElement("input");
@@ -142,8 +151,6 @@ function product(args) {
 }
 
 generateFakir = function(){
-
-
     //  label
     var labelsInputValue;
 
@@ -190,9 +197,15 @@ generateFakir = function(){
     for(i=0; i<document.getElementsByClassName("min").length; i++){
         var min = parseFloat(document.getElementsByClassName("min")[i].value,)
             max = parseFloat(document.getElementsByClassName("max")[i].value,)
-            precision = Math.pow(10, parseFloat(document.getElementsByClassName("precision")[i].value));
+            precision = Math.pow(10, parseFloat(document.getElementsByClassName("precision")[i].value))
+            type = document.querySelectorAll(".numericType")[i].value;
         
-        fakir.map(function(e){return e.push( Math.round((min+(Math.random()*max))*precision)/precision )});
+        if(type == "None"){
+            fakir.map(function(e){return e.push( Math.round((min+(Math.random()*max))*precision)/precision )});
+        }
+        if(type == "Percentage"){
+            fakir.map(function(e){return e.push( Math.round((min+(Math.random()*max))*precision)/precision )});
+        }
     }
     
     //  columnName
