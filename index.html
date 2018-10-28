@@ -15,6 +15,8 @@
 
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js'></script>
 </head>
 
 <body>
@@ -23,12 +25,72 @@
     <p>Simple fake data generator</p>
     </div>
 
-    <div id="settings">
-        <div id='index' class="settings"> Settings of index</div>
-    </div>
+    <div id="app">
+        <div id="settings">
+            <div v-for="column in columns" v-bind:class="[column.name, column.display ? '' : 'notDisplay' ]"> 
+                <div>
+                    Column name : <input v-model=column.name></input>
+                    Type :
+                    <select v-model="column.type">
+                        <option value="Numeric">Numeric</option>
+                        <option value="Label">Label</option>
+                        <option value="Date">Date</option>
+                    </select>
+                </div>
+                <div v-if="column.type=='Numeric'">
+                    Structure : 
+                    <select v-model="column.Settings.Numeric.structure">
+                        <option value="None">None</option>
+                        <option value="YTD">YTD</option>
+                        <option value="Percentage">Percentage</option>
+                    </select>
+                    Min:<input v-model=column.Settings.Numeric.min type="number"></input>
+                    Max:<input v-model=column.Settings.Numeric.max type="number"></input>
+                    Digit:<input v-model=column.Settings.Numeric.digit type="number"></input>
+                </div>
+                <div  v-if="column.type=='Label'">
+                    Structure :
+                    <select v-model="column.Settings.Label.structure">
+                        <option value="Breakdown">Breakdown</option>
+                        <option value="Children">Children of :</option>
+                        <option value="dateExtraction">Date extraction</option>
+                    </select>
+                    <input v-model=column.Settings.Label.dateExtraction v-if="column.Settings.Label.structure=='dateExtraction'"></input>
+                    <textarea v-if="column.Settings.Label.structure!='dateExtraction'"></textarea>
+                </div>
+                <div  v-if="column.type=='Date'">
+                    first date : <input v-model=column.Settings.Date.startDate type="date"></input>
+                    last date : <input v-model=column.Settings.Date.endDate type="date"></input>
+                    format : <input v-model=column.Settings.Date.format ></input>
+                    <br>
+                    granularity : <select v-model="column.Settings.Date.granularity">
+                        <option value="Day">Day</option>
+                        <option value="Month">Month</option>
+                        <option value="Year">Year</option>
+                    </select>
+                    setp : <input v-model=column.Settings.Date.step type="number"></input>
+                </div>
+                <button v-on:click="apply()"> Apply </button>
+            </div>
+        </div>
 
-
-    <div id="table">
+        <div id="table">
+            <table >
+                <tr>
+                    <td v-for="(column, index) in columns"> 
+                        <button v-on:click="displaySettings(column)"> o </button>
+                        <button v-on:click="remove(index)"> - </button>
+                        {{column.name}}
+                    </td>
+                    <td>
+                        <button v-on:click="addColumn()"> + </button>
+                    </td>
+                </tr>
+                <tr v-for="row in data">
+                    <td v-for="e in row">{{e}}</td>
+                </tr>
+            </table>
+        </div>
     </div>
 
     <div class="center">

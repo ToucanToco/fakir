@@ -10,6 +10,15 @@ body{
     display: none;
 }
 
+#settings {
+    margin: 5%;
+    background-color: antiquewhite;
+}
+
+#table {
+    margin: 5%;
+}
+
 button {
     background-color: #008CBA ; 
     border: none;
