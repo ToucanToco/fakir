@@ -29,7 +29,7 @@
         <div id="settings">
             <div v-for="column in columns" v-bind:class="[column.name, column.display ? '' : 'notDisplay' ]"> 
                 <div>
-                    Column name : <input v-model=column.name></input>
+                    Column name : <input v-model=column.name></input><br>
                     Type :
                     <select v-model="column.type">
                         <option value="Numeric">Numeric</option>
@@ -37,16 +37,19 @@
                         <option value="Date">Date</option>
                     </select>
                 </div>
+                <br>
                 <div v-if="column.type=='Numeric'">
                     Structure : 
                     <select v-model="column.Settings.Numeric.structure">
                         <option value="None">None</option>
                         <option value="YTD">YTD</option>
                         <option value="Percentage">Percentage</option>
-                    </select>
-                    Min:<input v-model=column.Settings.Numeric.min type="number"></input>
-                    Max:<input v-model=column.Settings.Numeric.max type="number"></input>
-                    Digit:<input v-model=column.Settings.Numeric.digit type="number"></input>
+                    </select><br>
+                    Min : <input v-model=column.Settings.Numeric.min type="number"></input>
+                    <br>
+                    Max : <input v-model=column.Settings.Numeric.max type="number"></input>
+                    <br>
+                    Digit : <input v-model=column.Settings.Numeric.digit type="number"></input>
                 </div>
                 <div  v-if="column.type=='Label'">
                     Structure :
@@ -55,29 +58,44 @@
                         <option value="Children">Children of :</option>
                         <option value="dateExtraction">Date extraction</option>
                     </select>
-                    <input v-model=column.Settings.Label.dateExtraction v-if="column.Settings.Label.structure=='dateExtraction'"></input>
-                    <textarea v-if="column.Settings.Label.structure!='dateExtraction'"></textarea>
+                    <br>
+                    <span v-if="column.Settings.Label.structure=='dateExtraction'">Extract : <input v-model=column.Settings.Label.dateExtraction></input></span>
+                    <span v-if="column.Settings.Label.structure=='Breakdown'"> Liste des labels : <br> <textarea></textarea></span>
+                    <span v-if="column.Settings.Label.structure=='Children'"> 
+                        <select v-model="column.Settings.Label.parentColumn">
+                            <option v-for="labelColumn in _.filter(columns, function(c){return (column.name != c.name)&(c.Settings.Label.structure=='Breakdown')&(c.type=='Label') })" value={{labelColumn.name}}>{{labelColumn.name}}</option>
+                        </select>
+                        <br>
+                        <span v-if="column.Settings.Label.parentColumn!=''">
+                            <span v-for="label in _.filter(columns, function(c){return column.Settings.Label.parentColumn==c.name})[0].Settings.Label.labelsList">
+                                {{label}}
+                            </span>
+                        </span>
+                    </span>
+                    <br>
                 </div>
                 <div  v-if="column.type=='Date'">
-                    first date : <input v-model=column.Settings.Date.startDate type="date"></input>
-                    last date : <input v-model=column.Settings.Date.endDate type="date"></input>
-                    format : <input v-model=column.Settings.Date.format ></input>
+                    First date : <input v-model=column.Settings.Date.startDate type="date"></input><br>
+                    Last date : <input v-model=column.Settings.Date.endDate type="date"></input><br>
+                    Format : <input v-model=column.Settings.Date.format ></input><br>
                     <br>
-                    granularity : <select v-model="column.Settings.Date.granularity">
+                    Granularity : <select v-model="column.Settings.Date.granularity">
                         <option value="Day">Day</option>
                         <option value="Month">Month</option>
                         <option value="Year">Year</option>
                     </select>
-                    setp : <input v-model=column.Settings.Date.step type="number"></input>
+                    <br>
+                    Setp : <input v-model=column.Settings.Date.step type="number"></input>
                 </div>
-                <button v-on:click="apply()"> Apply </button>
+                <br>
+                <div id="apply" v-on:click="apply()"> Apply </div>
             </div>
         </div>
 
         <div id="table">
-            <table >
+            <table>
                 <tr>
-                    <td v-for="(column, index) in columns"> 
+                    <td v-for="(column, index) in columns" class="header"> 
                         <button v-on:click="displaySettings(column)"> o </button>
                         <button v-on:click="remove(index)"> - </button>
                         {{column.name}}

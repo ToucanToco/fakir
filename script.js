@@ -27,6 +27,7 @@ var app = new Vue({
     remove: function(index){
         console.log(index)
         app.columns.splice(index, 1)
+        _.map(app.data, function(row){row.splice(index, 1)})
     },
     displaySettings:function(column){
         console.log("displaySettings")
@@ -35,7 +36,12 @@ var app = new Vue({
     },
     apply:function(){
         console.log("apply")
-    }
+
+        _.map(app.data, function(row){row.push(_.random())})
+
+
+    },
+    
   }
 })
 
