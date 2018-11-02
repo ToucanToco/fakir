@@ -1,8 +1,12 @@
 body{
     font-family: Montserrat;
     font-style:normal;
-    font-weight:700;
+    /* font-weight:700; */
     text-transform:none;
+}
+
+#app{
+    margin: 20px;
 }
 
 .center {
@@ -11,63 +15,27 @@ body{
     float: right;
 }
 
-#apply {
-    width:100%;
-    text-align: center;
-    background-color: gainsboro;
+.indent-1 {
+    margin-left:15px; 
 }
 
-#apply:hover {
-    cursor: pointer;
-    background-color: gray;
+.indent-2 {
+    margin:15px 15px; 
+    padding: 15px;
+    background-color: ghostwhite;
 }
 
-.notDisplay {
-    display: none;
+.indent-3 {
+    margin-left:15px; 
 }
 
-#settings {
-    margin-left: 2.5%;
-    margin-right: 5%;
-    margin-bottom:5%; 
-    margin-top:5%; 
-    background-color: antiquewhite;
-    width: 40%;
-    float: left;
-    padding: 1%
+.unactive {
+    opacity: 0.5;
 }
 
-table {
-    border-collapse: collapse;
+.settingsTitle {
+    font-weight: bold;
 }
-
-#table {
-    margin-right: 2.5%;
-    margin-bottom:5%; 
-    margin-top:5%; 
-    width: 45%;
-    float: left;
-    font-family: 'Montserrat-Tabular';
-    font-weight: 400;
-}
-
-.header::after {
-    content: "\E008";
-}
-
-table td, table th {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-
-table th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    color: white;
-}
-
-
 
 button {
     background-color: #008CBA ; 

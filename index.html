@@ -21,98 +21,39 @@
 
 <body>
     <div class="center">
-    <h1>Fakir</h1>
+    <h1>Fakir v2</h1>
     <p>Simple fake data generator</p>
     </div>
 
     <div id="app">
-        <div id="settings">
-            <div v-for="column in columns" v-bind:class="[column.name, column.display ? '' : 'notDisplay' ]"> 
-                <div>
-                    Column name : <input v-model=column.name></input><br>
-                    Type :
-                    <select v-model="column.type">
-                        <option value="Numeric">Numeric</option>
-                        <option value="Label">Label</option>
-                        <option value="Date">Date</option>
-                    </select>
-                </div>
-                <br>
-                <div v-if="column.type=='Numeric'">
-                    Structure : 
-                    <select v-model="column.Settings.Numeric.structure">
-                        <option value="None">None</option>
-                        <option value="YTD">YTD</option>
-                        <option value="Percentage">Percentage</option>
-                    </select><br>
-                    Min : <input v-model=column.Settings.Numeric.min type="number"></input>
-                    <br>
-                    Max : <input v-model=column.Settings.Numeric.max type="number"></input>
-                    <br>
-                    Digit : <input v-model=column.Settings.Numeric.digit type="number"></input>
-                </div>
-                <div  v-if="column.type=='Label'">
-                    Structure :
-                    <select v-model="column.Settings.Label.structure">
-                        <option value="Breakdown">Breakdown</option>
-                        <option value="Children">Children of :</option>
-                        <option value="dateExtraction">Date extraction</option>
-                    </select>
-                    <br>
-                    <span v-if="column.Settings.Label.structure=='dateExtraction'">Extract : <input v-model=column.Settings.Label.dateExtraction></input></span>
-                    <span v-if="column.Settings.Label.structure=='Breakdown'"> Liste des labels : <br> <textarea></textarea></span>
-                    <span v-if="column.Settings.Label.structure=='Children'"> 
-                        <select v-model="column.Settings.Label.parentColumn">
-                            <option v-for="labelColumn in _.filter(columns, function(c){return (column.name != c.name)&(c.Settings.Label.structure=='Breakdown')&(c.type=='Label') })" value={{labelColumn.name}}>{{labelColumn.name}}</option>
-                        </select>
-                        <br>
-                        <span v-if="column.Settings.Label.parentColumn!=''">
-                            <span v-for="label in _.filter(columns, function(c){return column.Settings.Label.parentColumn==c.name})[0].Settings.Label.labelsList">
-                                {{label}}
-                            </span>
-                        </span>
-                    </span>
-                    <br>
-                </div>
-                <div  v-if="column.type=='Date'">
-                    First date : <input v-model=column.Settings.Date.startDate type="date"></input><br>
-                    Last date : <input v-model=column.Settings.Date.endDate type="date"></input><br>
-                    Format : <input v-model=column.Settings.Date.format ></input><br>
-                    <br>
-                    Granularity : <select v-model="column.Settings.Date.granularity">
-                        <option value="Day">Day</option>
-                        <option value="Month">Month</option>
-                        <option value="Year">Year</option>
-                    </select>
-                    <br>
-                    Setp : <input v-model=column.Settings.Date.step type="number"></input>
-                </div>
-                <br>
-                <div id="apply" v-on:click="apply()"> Apply </div>
-            </div>
+        <div>Chart type
+        <select v-model=activeType>
+            <option v-for="chart in charts" v-bind:value=chart.type>{{chart.type}}</option>
+        </select>
         </div>
-
-        <div id="table">
-            <table>
-                <tr>
-                    <td v-for="(column, index) in columns" class="header"> 
-                        <button v-on:click="displaySettings(column)"> o </button>
-                        <button v-on:click="remove(index)"> - </button>
-                        {{column.name}}
-                    </td>
-                    <td>
-                        <button v-on:click="addColumn()"> + </button>
-                    </td>
-                </tr>
-                <tr v-for="row in data">
-                    <td v-for="e in row">{{e}}</td>
-                </tr>
-            </table>
+        
+        <div v-for="chart in charts" v-if="activeType==chart.type" class="indent-1">
+            <div v-for="(settingsOfParam, param) in chart.settings" v-bind:class="['indent-2', settingsOfParam.isActive ? '':'unactive' ]">
+                
+                <div class="settingsTitle"> 
+                    <input v-if="!settingsOfParam.isMandatory" type="checkbox" v-model=settingsOfParam.isActive>  {{param}} : 
+                </div>
+                <div v-for="(value, settings) in settingsOfParam.settings" v-bind:class="['indent-3', settingsOfParam.isActive ? '':'unactive' ]">
+                    {{settings}} :
+                        <input v-model=value.value :type=value.type v-if="!_.includes(['textarea','select'], value.type)">
+                        <select v-if="value.type=='select'" v-model=value.value>
+                            <option v-for="option in value.options" v-bind:value=option>{{option}}</option>
+                        </select>
+                        <textarea v-if="value.type=='textarea'" v-model=value.value>
+                            
+                        </textarea>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="center">
-    <button id='generateButton' type="button"> Download fake data </button>
+    <button id='generateButton' type="button" onclick="app.generateAndDownload()"> Download fake data </button>
     <p> Made with <3 for Toucan Toco concepteur </p>
     </div>
 </body>
