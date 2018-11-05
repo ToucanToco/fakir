@@ -10,7 +10,7 @@ var app = new Vue({
           isMandatory:true,
           type:"numeric",
           settings:{
-            "name":{value:"value", type:"text"}, 
+            "name":{value:"value", type:"text", text:"column name"}, 
             "type":{value:"Between min and max", type:"select", options:["Between min and max", "YTD from min to max"]},
             "min":{value:0, type:"number"},
             "max":{value:100, type:"number"},
@@ -21,7 +21,7 @@ var app = new Vue({
           isMandatory:true,
           type:"date",
           settings:{
-            "name":{value:"date", type:"text"}, 
+            "name":{value:"date", type:"text", text:"column name"}, 
             "start":{value:"2018-01-01", type:"date"},
             "end":{value:"2018-01-30", type:"date"},
             "granularity":{value:"Day", type:"select", options:["Day", "Month", "Year"]},
@@ -33,7 +33,7 @@ var app = new Vue({
           isMandatory:false,
           type:"label",
           settings:{
-            "name":{value:"groups", type:"text"}, 
+            "name":{value:"groups", type:"text", text:"column name"}, 
             "values":{value:"GroupeA/GroupeB/GroupeC", type:"textarea"}, 
           }
         },
@@ -42,7 +42,7 @@ var app = new Vue({
           isMandatory:false,
           type:"label",
           settings:{
-            "name":{value:"filter_bottom_right", type:"text"}, 
+            "name":{value:"filter_bottom_right", type:"text", text:"column name"}, 
             "values":{value:"GroupeA/GroupeB/GroupeC", type:"textarea"}, 
           }
         },
@@ -51,7 +51,7 @@ var app = new Vue({
           isMandatory:false,
           type:"label",
           settings:{
-            "name":{value:"filter_upper_right", type:"text"}, 
+            "name":{value:"filter_upper_right", type:"text", text:"column name"}, 
             "values":{value:"GroupeA/GroupeB/GroupeC", type:"textarea"}, 
           }
         },
@@ -60,7 +60,7 @@ var app = new Vue({
           isMandatory:false,
           type:"label",
           settings:{
-            "name":{value:"filter_upper_middle", type:"text"}, 
+            "name":{value:"filter_upper_middle", type:"text", text:"column name"}, 
             "values":{value:"GroupeA/GroupeB/GroupeC", type:"textarea"}, 
           },
         },
@@ -69,7 +69,7 @@ var app = new Vue({
           isMandatory:false,
           type:"label",
           settings:{
-            "name":{value:"reports", type:"text"}, 
+            "name":{value:"reports", type:"text", text:"column name"}, 
             "values":{value:"reportA/reportB/reportC", type:"textarea"}, 
           }
         }
@@ -108,126 +108,7 @@ var app = new Vue({
           isMandatory:true,
           type:"depend",
           settings:{
-            "name":{value:"label", type:"text"}, 
-            "values":{value:"LabelA/LabelB/LabelC", type:"textarea"},
-            "type":{
-              value:"With drill", 
-              type:"select", 
-              master:true,
-              options:["No drill","With drill"],
-              subsettings:{
-                "No drill":{
-                },
-                "With drill":{
-                  "sublabel of ":{value:{
-                    "LabelA":"i/o",
-                    "LabelB":"r/y/u",
-                    "LabelC":"a/d"
-                  }, type:"childOfLabel", parent:"label"}
-                },
-              }
-            },
-          }
-        },
-        "variation":{
-          isActive:false,
-          isMandatory:false,
-          type:"numeric",
-          settings:{
-            "name":{value:"variation", type:"text"}, 
-            "min":{value:0, type:"number"},
-            "max":{value:10, type:"number"},
-            "digits":{value:0, type:"number"},}, 
-        },
-        "groups": {
-          isActive:false,
-          isMandatory:false,
-          type:"label",
-          settings:{
-            "name":{value:"groups", type:"text"}, 
-            "values":{value:"IndicateurA/IndicateurB/IndicateurC", type:"textarea"}, 
-          }
-        },
-        "filter-bottom-right": {
-          isActive:false,
-          isMandatory:false,
-          type:"label",
-          settings:{
-            "name":{value:"filter_bottom_right", type:"text"}, 
-            "values":{value:"GroupeA/GroupeB/GroupeC", type:"textarea"}, 
-          }
-        },
-        "filter-upper-right": {
-          isActive:false,
-          isMandatory:false,
-          type:"label",
-          settings:{
-            "name":{value:"filter_upper_right", type:"text"}, 
-            "values":{value:"GroupeA/GroupeB/GroupeC", type:"textarea"}, 
-          }
-        },
-        "filter-upper-middle": {
-          isActive:false,
-          isMandatory:false,
-          type:"label",
-          settings:{
-            "name":{value:"filter_upper_middle", type:"text"}, 
-            "values":{value:"GroupeA/GroupeB/GroupeC", type:"textarea"}, 
-          },
-        },
-        "reports": {
-          isActive:false,
-          isMandatory:false,
-          type:"label",
-          settings:{
-            "name":{value:"reports", type:"text"}, 
-            "values":{value:"reportA/reportB/reportC", type:"textarea"}, 
-          }
-        },
-        "dateRequester": {
-          isActive:false,
-          isMandatory:false,
-          type:"date",
-          settings:{
-            "name":{value:"dateRequester", type:"text"}, 
-            "start":{value:"2018-01-01", type:"date"},
-            "end":{value:"2018-01-30", type:"date"},
-            "granularity":{value:"Day", type:"select", options:["Day", "Month", "Year"]},
-            "step":{value:1, type:"number"},
-            "format":{value:"%Y-%m-%d", type:"text"}
-          }
-        }
-      }
-    },
-    {
-      type:"Bubblechart",
-      settings:{
-        "cx":{
-          isActive:true,
-          isMandatory:true,
-          type:"numeric",
-          settings:{
-            "name":{value:"cx", type:"text"}, 
-            "min":{value:0, type:"number"},
-            "max":{value:100, type:"number"},
-            "digits":{value:0, type:"number"},}, 
-        },
-        "cy":{
-          isActive:true,
-          isMandatory:true,
-          type:"numeric",
-          settings:{
-            "name":{value:"cy", type:"text"}, 
-            "min":{value:0, type:"number"},
-            "max":{value:100, type:"number"},
-            "digits":{value:0, type:"number"},}, 
-        },
-        "label":{
-          isActive:true,
-          isMandatory:true,
-          type:"depend",
-          settings:{
-            "name":{value:"label", type:"text"}, 
+            "name":{value:"label", type:"text", text:"column name"}, 
             "values":{value:"LabelA/LabelB/LabelC", type:"textarea"},
             "type":{
               value:"No drill", 
@@ -248,15 +129,25 @@ var app = new Vue({
             },
           }
         },
-        "r":{
+        "optionalbutton":{isMandatory:true, isActive:true},
+        "variation":{
           isActive:false,
           isMandatory:false,
           type:"numeric",
           settings:{
-            "name":{value:"value", type:"text"}, 
+            "name":{value:"variation", type:"text", text:"column name"}, 
             "min":{value:0, type:"number"},
-            "max":{value:100, type:"number"},
+            "max":{value:10, type:"number"},
             "digits":{value:0, type:"number"},}, 
+        },
+        "groups": {
+          isActive:false,
+          isMandatory:false,
+          type:"label",
+          settings:{
+            "name":{value:"groups", type:"text", text:"column name"}, 
+            "values":{value:"IndicateurA/IndicateurB/IndicateurC", type:"textarea"}, 
+          }
         },
         "filter-bottom-right": {
           isActive:false,
@@ -272,7 +163,7 @@ var app = new Vue({
           isMandatory:false,
           type:"label",
           settings:{
-            "name":{value:"filter_upper_right", type:"text"}, 
+            "name":{value:"filter_upper_right", type:"text", text:"column name"}, 
             "values":{value:"GroupeA/GroupeB/GroupeC", type:"textarea"}, 
           }
         },
@@ -281,7 +172,7 @@ var app = new Vue({
           isMandatory:false,
           type:"label",
           settings:{
-            "name":{value:"filter_upper_middle", type:"text"}, 
+            "name":{value:"filter_upper_middle", type:"text", text:"column name"}, 
             "values":{value:"GroupeA/GroupeB/GroupeC", type:"textarea"}, 
           },
         },
@@ -290,7 +181,7 @@ var app = new Vue({
           isMandatory:false,
           type:"label",
           settings:{
-            "name":{value:"reports", type:"text"}, 
+            "name":{value:"reports", type:"text", text:"column name"}, 
             "values":{value:"reportA/reportB/reportC", type:"textarea"}, 
           }
         },
@@ -299,7 +190,118 @@ var app = new Vue({
           isMandatory:false,
           type:"date",
           settings:{
-            "name":{value:"dateRequester", type:"text"}, 
+            "name":{value:"dateRequester", type:"text", text:"column name"}, 
+            "start":{value:"2018-01-01", type:"date"},
+            "end":{value:"2018-01-30", type:"date"},
+            "granularity":{value:"Day", type:"select", options:["Day", "Month", "Year"]},
+            "step":{value:1, type:"number"},
+            "format":{value:"%Y-%m-%d", type:"text"}
+          }
+        }
+      }
+    },
+    {
+      type:"Bubblechart",
+      settings:{
+        "cx":{
+          isActive:true,
+          isMandatory:true,
+          type:"numeric",
+          settings:{
+            "name":{value:"cx", type:"text", text:"column name"}, 
+            "min":{value:0, type:"number"},
+            "max":{value:100, type:"number"},
+            "digits":{value:0, type:"number"},}, 
+        },
+        "cy":{
+          isActive:true,
+          isMandatory:true,
+          type:"numeric",
+          settings:{
+            "name":{value:"cy", type:"text", text:"column name"}, 
+            "min":{value:0, type:"number"},
+            "max":{value:100, type:"number"},
+            "digits":{value:0, type:"number"},}, 
+        },
+        "label":{
+          isActive:true,
+          isMandatory:true,
+          type:"depend",
+          settings:{
+            "name":{value:"label", type:"text", text:"column name"}, 
+            "values":{value:"LabelA/LabelB/LabelC", type:"textarea"},
+            "type":{
+              value:"No drill", 
+              type:"select", 
+              master:true,
+              options:["No drill","With drill"],
+              subsettings:{
+                "No drill":{
+                },
+                "With drill":{
+                  "sublabel of ":{value:{
+                    "LabelA":"sublabelA1/sublabelA2",
+                    "LabelB":"sublabelB1/sublabelB2/sublabelB3",
+                    "LabelC":"sublabelC1/sublabelC1"
+                  }, type:"childOfLabel", parent:"label"}
+                },
+              }
+            },
+          }
+        },
+        "optionalbutton":{isMandatory:true, isActive:true},
+        "r":{
+          isActive:false,
+          isMandatory:false,
+          type:"numeric",
+          settings:{
+            "name":{value:"value", type:"text", text:"column name"}, 
+            "min":{value:0, type:"number"},
+            "max":{value:100, type:"number"},
+            "digits":{value:0, type:"number"},}, 
+        },
+        "filter-bottom-right": {
+          isActive:false,
+          isMandatory:false,
+          type:"label",
+          settings:{
+            "name":{value:"filter_bottom_right", type:"text", text:"column name"}, 
+            "values":{value:"GroupeA/GroupeB/GroupeC", type:"textarea"}, 
+          }
+        },
+        "filter-upper-right": {
+          isActive:false,
+          isMandatory:false,
+          type:"label",
+          settings:{
+            "name":{value:"filter_upper_right", type:"text", text:"column name"}, 
+            "values":{value:"GroupeA/GroupeB/GroupeC", type:"textarea"}, 
+          }
+        },
+        "filter-upper-middle": {
+          isActive:false,
+          isMandatory:false,
+          type:"label",
+          settings:{
+            "name":{value:"filter_upper_middle", type:"text", text:"column name"}, 
+            "values":{value:"GroupeA/GroupeB/GroupeC", type:"textarea"}, 
+          },
+        },
+        "reports": {
+          isActive:false,
+          isMandatory:false,
+          type:"label",
+          settings:{
+            "name":{value:"reports", type:"text", text:"column name"}, 
+            "values":{value:"reportA/reportB/reportC", type:"textarea"}, 
+          }
+        },
+        "dateRequester": {
+          isActive:false,
+          isMandatory:false,
+          type:"date",
+          settings:{
+            "name":{value:"dateRequester", type:"text", text:"column name"}, 
             "start":{value:"2018-01-01", type:"date"},
             "end":{value:"2018-01-30", type:"date"},
             "granularity":{value:"Day", type:"select", options:["Day", "Month", "Year"]},
@@ -317,7 +319,7 @@ var app = new Vue({
           isMandatory:true,
           type:"numeric",
           settings:{
-            "name":{value:"value", type:"text"},
+            "name":{value:"value", type:"text", text:"column name"},
             "From value":{value:0, type:"number"},
             "To value":{value:100, type:"number"},
             "Variation always of same sign":{value:false, type:"checkbox"},
@@ -328,12 +330,12 @@ var app = new Vue({
           isMandatory:true,
           type:"depend",
           settings:{
-            "name":{value:"label", type:"text"}, 
+            "name":{value:"label", type:"text", text:"column name"}, 
             "From label":{value:"From", type:"text"}, 
-            "To label":{value:"Label", type:"text"}, 
+            "To label":{value:"To", type:"text"}, 
             "values":{value:"LabelA/LabelB/LabelC", type:"textarea"},
             "type":{
-              value:"With drill", 
+              value:"No drill", 
               type:"select", 
               master:true,
               options:["No drill","With drill"],
@@ -342,21 +344,22 @@ var app = new Vue({
                 },
                 "With drill":{
                   "sublabel of ":{value:{
-                    "LabelA":"i/o",
-                    "LabelB":"r/y/u",
-                    "LabelC":"a/d"
+                    "LabelA":"sublabelA1/sublabelA2",
+                    "LabelB":"sublabelB1/sublabelB2/sublabelB3",
+                    "LabelC":"sublabelC1/sublabelC1"
                   }, type:"childOfLabel", parent:"label"}
                 },
               }
             },
           }
         },
+        "optionalbutton":{isMandatory:true, isActive:true},
         "filter-bottom-right": {
           isActive:false,
           isMandatory:false,
           type:"label",
           settings:{
-            "name":{value:"filter_bottom_right", type:"text"}, 
+            "name":{value:"filter_bottom_right", type:"text", text:"column name"}, 
             "values":{value:"GroupeA/GroupeB/GroupeC", type:"textarea"}, 
           }
         },
@@ -365,7 +368,7 @@ var app = new Vue({
           isMandatory:false,
           type:"label",
           settings:{
-            "name":{value:"filter_upper_right", type:"text"}, 
+            "name":{value:"filter_upper_right", type:"text", text:"column name"}, 
             "values":{value:"GroupeA/GroupeB/GroupeC", type:"textarea"}, 
           }
         },
@@ -374,7 +377,7 @@ var app = new Vue({
           isMandatory:false,
           type:"label",
           settings:{
-            "name":{value:"filter_upper_middle", type:"text"}, 
+            "name":{value:"filter_upper_middle", type:"text", text:"column name"}, 
             "values":{value:"GroupeA/GroupeB/GroupeC", type:"textarea"}, 
           },
         },
@@ -383,7 +386,7 @@ var app = new Vue({
           isMandatory:false,
           type:"label",
           settings:{
-            "name":{value:"reports", type:"text"}, 
+            "name":{value:"reports", type:"text", text:"column name"}, 
             "values":{value:"reportA/reportB/reportC", type:"textarea"}, 
           }
         },
@@ -392,7 +395,7 @@ var app = new Vue({
           isMandatory:false,
           type:"date",
           settings:{
-            "name":{value:"dateRequester", type:"text"}, 
+            "name":{value:"dateRequester", type:"text", text:"column name"}, 
             "start":{value:"2018-01-01", type:"date"},
             "end":{value:"2018-01-30", type:"date"},
             "granularity":{value:"Day", type:"select", options:["Day", "Month", "Year"]},
@@ -403,7 +406,8 @@ var app = new Vue({
       }
     }
   ],
-  activeType:"Waterfall"
+  activeType:"Waterfall",
+  seeOptionalParam:false
   },
 
   methods:{

@@ -2,14 +2,14 @@
 <html>
 <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128068727-1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128068727-1"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
     gtag('config', 'UA-128068727-1');
-    </script> -->
+    </script>
     <!-- END Global site tag (gtag.js) - Google Analytics -->
 
 
@@ -21,60 +21,73 @@
 </head>
 
 <body>
+    <div id=main>
     <div class="center">
     <h1>Fakir v2</h1>
     <p>Simple fake data generator</p>
     </div>
-
     <div id="app">
-        <div>Chart type
-        <select v-model=activeType>
+        <div>Chart type : 
+        <select v-model=activeType id=choice>
             <option v-for="chart in charts" v-bind:value=chart.type>{{chart.type}}</option>
         </select>
         </div>
         
         <div v-for="chart in charts" v-if="activeType==chart.type" class="indent-1">
-            <div v-for="(settingsOfParam, param) in chart.settings" v-bind:class="['indent-2', settingsOfParam.isActive ? '':'unactive' ]">
-                
-                <div class="settingsTitle"> 
-                    <input v-if="!settingsOfParam.isMandatory" type="checkbox" v-model=settingsOfParam.isActive>  
-                    {{param}} : 
-                </div>
-                <div v-for="(value, settings) in settingsOfParam.settings" v-bind:class="['indent-3', settingsOfParam.isActive ? '':'unactive' ]">
-                    <div v-if=settingsOfParam.isActive >
-                        {{settings}} :
-                        <input v-model=value.value :type=value.type v-if="!_.includes(['textarea','select','childOfLabel'], value.type)">
-                        <select v-if="value.type=='select'" v-model=value.value>
-                            <option v-for="option in value.options" v-bind:value=option>{{option}}</option>
-                        </select>
-                        <div v-if="value.type=='textarea'">
-                            <textarea v-if="value.type=='textarea'" v-model=value.value></textarea>
-                        </div>
-                        <div v-if="value.type=='childOfLabel'" class="indent-3">
-                            <div v-for="lab in chart.settings[value.parent].settings.values.value.split('/')">
-                                {{lab}} : <div><textarea v-model=value.value[lab]></textarea></div>
+            <div v-for="(settingsOfParam, param) in chart.settings" v-bind:class="[param=='optionalbutton' ? '':'indent-2', settingsOfParam.isActive ? '':'unactive' ]"  
+            v-if="seeOptionalParam|settingsOfParam.isMandatory">
+                <div v-if="param!='optionalbutton'">
+                    <div class="settingsTitle" > 
+                        <input v-if="!settingsOfParam.isMandatory" type="checkbox" v-model=settingsOfParam.isActive>  
+                        <span class=param>{{param}} : </span>
+                    </div>
+                    <div v-for="(value, settings) in settingsOfParam.settings" v-bind:class="['indent-3', settingsOfParam.isActive ? '':'unactive' ]">
+                        <div v-if=settingsOfParam.isActive >
+                            <span v-if=!value.text>{{settings}} :</span>
+                            <span v-if=value.text>{{value.text}} :</span>
+                            <input v-model=value.value :type=value.type v-if="!_.includes(['textarea','select','childOfLabel'], value.type)">
+                            <select v-if="value.type=='select'" v-model=value.value>
+                                <option v-for="option in value.options" v-bind:value=option>{{option}}</option>
+                            </select>
+                            <div v-if="value.type=='textarea'">
+                                <textarea v-if="value.type=='textarea'" v-model=value.value></textarea>
                             </div>
-                        </div>
-
-                        <div v-if="value.master">
-                            <div v-for="(subvalue, subsettings) in value.subsettings[value.value]">
-                            {{subsettings}}:
-                                <input v-model=subvalue.value :type=subvalue.type v-if="!_.includes(['textarea','select','childOfLabel'], subvalue.type)">
-                                <select v-if="subvalue.type=='select'" v-model=subvalue.value>
-                                    <option v-for="option in subvalue.options" v-bind:value=option>{{option}}</option>
-                                </select>
-                                <div v-if="subvalue.type=='textarea'">
-                                    <textarea v-if="subvalue.type=='textarea'" v-model=subvalue.value></textarea>
+                            <div v-if="value.type=='childOfLabel'" class="indent-3">
+                                <div v-for="lab in chart.settings[value.parent].settings.values.value.split('/')">
+                                    {{lab}} : <div><textarea v-model=value.value[lab]></textarea></div>
                                 </div>
-                                <div v-if="subvalue.type=='childOfLabel'" class="indent-3">
-                                    <div v-for="lab in chart.settings[subvalue.parent].settings.values.value.split('/')">
-                                        {{lab}} : <div><textarea v-model=subvalue.value[lab]></textarea></div>
+                            </div>
+
+                            <div v-if="value.master">
+                                <div v-for="(subvalue, subsettings) in value.subsettings[value.value]">
+                                {{subsettings}}:
+                                    <input v-model=subvalue.value :type=subvalue.type v-if="!_.includes(['textarea','select','childOfLabel'], subvalue.type)">
+                                    <select v-if="subvalue.type=='select'" v-model=subvalue.value>
+                                        <option v-for="option in subvalue.options" v-bind:value=option>{{option}}</option>
+                                    </select>
+                                    <div v-if="subvalue.type=='textarea'">
+                                        <textarea v-if="subvalue.type=='textarea'" v-model=subvalue.value></textarea>
                                     </div>
-                                </div> 
+                                    <div v-if="subvalue.type=='childOfLabel'" class="indent-3">
+                                        <div v-for="lab in chart.settings[subvalue.parent].settings.values.value.split('/')">
+                                            {{lab}} : <div><textarea v-model=subvalue.value[lab]></textarea></div>
+                                        </div>
+                                    </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <center v-if="param=='optionalbutton'">
+                    <div v-if="!seeOptionalParam" onclick="app.seeOptionalParam = true" class="optionalbutton">
+                        <span style="text-decoration:underline;cursor: pointer;">SHOW OPTIONAL PARAMETERS</span>
+                    </div>
+                    <div v-if="seeOptionalParam" class="optionalbutton" onclick="app.seeOptionalParam = false">
+                            <div class="alignleft">OPTIONAL PARAMETERS</div>
+                            <div class="alignright" >HIDE</div>
+                            <br>
+                    </div>
+                </center>
             </div>
         </div>
     </div>
@@ -83,6 +96,7 @@
     <button id='generateButton' type="button" onclick="app.generateAndDownload()"> Download fake data </button>
     <p> Made with <3 for Toucan Toco concepteur </p>
     </div>
+   </div>
 </body>
 <script src="script.js"></script>
 </html>
