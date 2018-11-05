@@ -28,6 +28,7 @@ var app = new Vue({
             "step":{value:1, type:"number"},
             "format":{value:"%Y-%m-%d", type:"text"}}
         },
+        "optionalbutton":{isMandatory:true, isActive:true},
         "groups": {
           isActive:false,
           isMandatory:false,
