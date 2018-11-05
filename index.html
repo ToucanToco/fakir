@@ -2,14 +2,14 @@
 <html>
 <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128068727-1"></script>
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128068727-1"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
     gtag('config', 'UA-128068727-1');
-    </script>
+    </script> -->
     <!-- END Global site tag (gtag.js) - Google Analytics -->
 
 
@@ -17,6 +17,7 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src='https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js'></script>
+    <script src='utils.js'></script>
 </head>
 
 <body>
@@ -36,17 +37,43 @@
             <div v-for="(settingsOfParam, param) in chart.settings" v-bind:class="['indent-2', settingsOfParam.isActive ? '':'unactive' ]">
                 
                 <div class="settingsTitle"> 
-                    <input v-if="!settingsOfParam.isMandatory" type="checkbox" v-model=settingsOfParam.isActive>  {{param}} : 
+                    <input v-if="!settingsOfParam.isMandatory" type="checkbox" v-model=settingsOfParam.isActive>  
+                    {{param}} : 
                 </div>
                 <div v-for="(value, settings) in settingsOfParam.settings" v-bind:class="['indent-3', settingsOfParam.isActive ? '':'unactive' ]">
-                    {{settings}} :
-                        <input v-model=value.value :type=value.type v-if="!_.includes(['textarea','select'], value.type)">
+                    <div v-if=settingsOfParam.isActive >
+                        {{settings}} :
+                        <input v-model=value.value :type=value.type v-if="!_.includes(['textarea','select','childOfLabel'], value.type)">
                         <select v-if="value.type=='select'" v-model=value.value>
                             <option v-for="option in value.options" v-bind:value=option>{{option}}</option>
                         </select>
-                        <textarea v-if="value.type=='textarea'" v-model=value.value>
-                            
-                        </textarea>
+                        <div v-if="value.type=='textarea'">
+                            <textarea v-if="value.type=='textarea'" v-model=value.value></textarea>
+                        </div>
+                        <div v-if="value.type=='childOfLabel'" class="indent-3">
+                            <div v-for="lab in chart.settings[value.parent].settings.values.value.split('/')">
+                                {{lab}} : <div><textarea v-model=value.value[lab]></textarea></div>
+                            </div>
+                        </div>
+
+                        <div v-if="value.master">
+                            <div v-for="(subvalue, subsettings) in value.subsettings[value.value]">
+                            {{subsettings}}:
+                                <input v-model=subvalue.value :type=subvalue.type v-if="!_.includes(['textarea','select','childOfLabel'], subvalue.type)">
+                                <select v-if="subvalue.type=='select'" v-model=subvalue.value>
+                                    <option v-for="option in subvalue.options" v-bind:value=option>{{option}}</option>
+                                </select>
+                                <div v-if="subvalue.type=='textarea'">
+                                    <textarea v-if="subvalue.type=='textarea'" v-model=subvalue.value></textarea>
+                                </div>
+                                <div v-if="subvalue.type=='childOfLabel'" class="indent-3">
+                                    <div v-for="lab in chart.settings[subvalue.parent].settings.values.value.split('/')">
+                                        {{lab}} : <div><textarea v-model=subvalue.value[lab]></textarea></div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
