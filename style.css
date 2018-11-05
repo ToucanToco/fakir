@@ -5,11 +5,25 @@ body{
     text-transform:none;
     background-color: gainsboro;
     margin: 0;
+    background-color: #2665a3;
+    background: url(pattern-blueprints.png);
+    background-image: url(pattern-blueprints.png);
+    background-position-x: initial;
+    background-position-y: initial;
+    background-size: initial;
+    background-repeat-x: initial;
+    background-repeat-y: initial;
+    background-attachment: initial;
+    background-origin: initial;
+    background-clip: initial;
+    background-color: #2665a3;
 }
 
 #main{
     background-color: white;
-    margin: 2%;
+    margin: 2vh 5vh;
+    padding: 2vh;
+    height: 92vh;
 }
 
 #app{
@@ -22,7 +36,7 @@ body{
 
 #choice {
     font-size: 1.1em;
-    width: 30%
+    width: 30%;
 }
 
 .alignleft {
@@ -73,7 +87,7 @@ input{
     text-align: center;
     width: 100%;
     /* float: right; */
-    height: 10vh;
+    height: 5vh;
 }
 
 .indent-1 {
