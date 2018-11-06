@@ -256,7 +256,7 @@ var app = new Vue({
           isMandatory:false,
           type:"numeric",
           settings:{
-            "name":{value:"value", type:"text", text:"column name"}, 
+            "name":{value:"r", type:"text", text:"column name"}, 
             "min":{value:0, type:"number"},
             "max":{value:100, type:"number"},
             "digits":{value:0, type:"number"},}, 
@@ -872,7 +872,7 @@ var app = new Vue({
         _.map(labels, function(e){return e.settings.name.value}),
         value.settings.name.value, 
         ["label", "type"] )
-      colNames[0] = "group"
+      colNames[0] = "groups"
 
       fakir = _.concat(
         [colNames],
